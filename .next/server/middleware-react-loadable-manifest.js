@@ -1,0 +1,1 @@
+self.__REACT_LOADABLE_MANIFEST="{\"components/Hero.tsx -> ./Starfield\":{\"id\":\"components/Hero.tsx -> ./Starfield\",\"files\":[\"static/chunks/_app-pages-browser_components_Starfield_tsx.js\"]}}"
