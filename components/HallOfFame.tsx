@@ -124,10 +124,9 @@ export default function HallOfFame({ people, centerImageUrl }: HallOfFameProps) 
               <motion.div
                 key={person.id}
                 className="absolute"
-                initial={{ opacity: 0, scale: 0 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, scale: 0, rotate: angle }}
+                whileInView={{ opacity: 1, scale: 1, rotate: angle }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
                 animate={{
                   rotate: [angle, angle + 360],
                 }}
@@ -137,6 +136,8 @@ export default function HallOfFame({ people, centerImageUrl }: HallOfFameProps) 
                   transformOrigin: '0 0',
                 }}
                 transition={{
+                  opacity: { duration: 0.6, delay: index * 0.1 },
+                  scale: { duration: 0.6, delay: index * 0.1 },
                   rotate: {
                     duration: 40 / speed,
                     repeat: Infinity,
