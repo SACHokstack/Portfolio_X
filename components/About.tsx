@@ -120,15 +120,11 @@ export default function About() {
           </p>
 
           <p>
-            With expertise spanning machine learning, natural language processing, and human-centered
-            design, I create solutions that bridge the gap between cutting-edge AI capabilities and
-            real-world applications.
+            Not the default 21y/o but with expertise spanning machine learning, natural language processing, and human-centered
+            design.
           </p>
 
-          <p>
-            My approach combines technical rigor with creative thinking, ensuring that every project
-            not only solves complex problems but does so in an elegant and user-friendly way.
-          </p>
+          
         </motion.div>
 
         {/* Stats Grid */}
@@ -139,10 +135,10 @@ export default function About() {
           transition={{ duration: 0.8, delay: 0.6 }}
         >
           {[
-            { value: '5+', label: 'Years Experience' },
-            { value: '50+', label: 'Projects Completed' },
-            { value: '20+', label: 'Happy Clients' },
-            { value: '∞', label: 'Ideas Generated' },
+            { value: '10+', label: 'AI Models Tinkered' },
+            { value: '5+', label: 'Projects Deployed' },
+            { value: '25+', label: 'Technologies Mastered' },
+            { value: '100%', label: 'Dedication Level' },
           ].map((stat) => (
             <motion.div
               key={stat.label}

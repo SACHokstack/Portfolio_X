@@ -23,9 +23,17 @@ interface HallOfFameProps {
 export default function HallOfFame({ people, centerImageUrl }: HallOfFameProps) {
   const [hoveredId, setHoveredId] = useState<string | null>(null)
 
+  // Calculate container size based on number of people and their orbits
+  const maxOrbitRadius = Math.max(
+    ...people.map((person, index) => person.orbitRadius || (150 + (index % 3) * 120 + 60))
+  )
+  const containerPadding = 200 // Extra space for avatars and UI
+  const minContainerSize = 600 // Minimum container size
+  const containerSize = Math.max(maxOrbitRadius * 2 + containerPadding, minContainerSize)
+
   // Generate orbital positions for each person
   const getOrbitalPosition = (index: number, person: Person) => {
-    // Use custom values or generate random ones
+    // Use custom values or generate random ones, but constrain within container
     const radius = person.orbitRadius || (150 + (index % 3) * 120 + Math.random() * 60)
     const angle = person.angle !== undefined ? person.angle : (index * 360) / people.length + Math.random() * 45
     const speed = person.speed || 1
@@ -63,7 +71,13 @@ export default function HallOfFame({ people, centerImageUrl }: HallOfFameProps) 
         </motion.div>
 
         {/* Cosmic Orbit Container */}
-        <div className="relative mx-auto flex min-h-[800px] max-w-6xl items-center justify-center md:min-h-[900px]">
+        <div
+          className="relative mx-auto flex items-center justify-center md:max-w-6xl"
+          style={{
+            minHeight: containerSize,
+            minWidth: containerSize,
+          }}
+        >
           {/* Center Avatar - "You" */}
           <motion.div
             className="relative z-20"
@@ -114,30 +128,33 @@ export default function HallOfFame({ people, centerImageUrl }: HallOfFameProps) 
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
+                animate={{
+                  rotate: [angle, angle + 360],
+                }}
                 style={{
                   left: '50%',
                   top: '50%',
+                  transformOrigin: '0 0',
+                }}
+                transition={{
+                  rotate: {
+                    duration: 40 / speed,
+                    repeat: Infinity,
+                    ease: 'linear',
+                  },
                 }}
               >
                 <motion.div
                   className="relative"
+                  style={{
+                    x: radius,
+                    y: 0,
+                  }}
                   animate={{
-                    x: Math.cos((angle * Math.PI) / 180) * radius,
-                    y: Math.sin((angle * Math.PI) / 180) * radius,
-                    rotate: 360,
+                    rotate: [0, -360],
                   }}
                   transition={{
                     rotate: {
-                      duration: 40 / speed,
-                      repeat: Infinity,
-                      ease: 'linear',
-                    },
-                    x: {
-                      duration: 40 / speed,
-                      repeat: Infinity,
-                      ease: 'linear',
-                    },
-                    y: {
                       duration: 40 / speed,
                       repeat: Infinity,
                       ease: 'linear',

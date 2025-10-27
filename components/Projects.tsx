@@ -16,6 +16,7 @@ interface Project {
   tech: string[]
   link?: string
   github?: string
+  image?: string
 }
 
 export default function Projects() {
@@ -25,34 +26,36 @@ export default function Projects() {
   // Sample projects - customize with your own
   const projects: Project[] = [
     {
-      title: 'AI-Powered Content Generator',
+      title: 'AI-Powered News Generator',
       category: 'Machine Learning',
-      description: 'Advanced NLP system generating human-quality content across multiple formats using state-of-the-art language models and custom fine-tuning.',
+      description: 'Advanced NLP system generating human-quality news content across multiple formats using state-of-the-art language models and TTS.',
       tech: ['Python', 'GPT-4', 'FastAPI', 'React'],
-      link: 'https://example.com',
-      github: 'https://github.com/yourusername/project',
+      github: 'https://github.com/SACHokstack/NewsAgent',
+      image: '/no.jpeg',
     },
     {
-      title: 'Real-Time Analytics Dashboard',
+      title: 'Real-Time Data Scrapping Platform',
       category: 'Full-Stack',
-      description: 'Enterprise-grade analytics platform processing millions of events per second with real-time visualizations and predictive insights.',
-      tech: ['TypeScript', 'Next.js', 'PostgreSQL', 'Redis'],
-      link: 'https://example.com',
-      github: 'https://github.com/yourusername/project',
+      description: 'Scrapping and aggregating data from 50+ sources in real-time from Districts of TamilNadu.',
+      tech: ['Selenium', 'beautifulsoup', 'PostgreSQL', 'Redis'],
+      github: 'https://github.com/SACHokstack/Resort_Extraction',
+      image: '/scrape.jpeg',
     },
     {
-      title: 'Computer Vision Pipeline',
+      title: 'Autonomous Chronos Discord Bot',
       category: 'AI/ML',
-      description: 'Production-ready object detection and tracking system deployed at scale for autonomous systems with 99.2% accuracy.',
+      description: 'Production-ready Chronos bassed discord chatbot with text,image and voice capabilities.',
       tech: ['Python', 'PyTorch', 'OpenCV', 'Docker'],
-      github: 'https://github.com/yourusername/project',
+      github: 'https://github.com/SACHokstack/DISCORDxCHRONOS',
+      image: '/discord.jpeg',
     },
     {
-      title: 'Distributed Training Framework',
-      category: 'Infrastructure',
-      description: 'Cloud-native distributed training orchestration system reducing model training time by 10x with automatic resource optimization.',
-      tech: ['Kubernetes', 'TensorFlow', 'Go', 'AWS'],
-      link: 'https://example.com',
+      title: 'MCP Server for Puch_AI',
+      category: 'MCP',
+      description: 'Model context protocol server enabling multi-agent coordination and planning for AI systems.',
+      tech: [' Langgraph', 'Python'],
+      github: 'https://github.com/SACHokstack/MCPrailway',
+      image: '/ro.jpeg',
     },
   ]
 
@@ -102,7 +105,7 @@ export default function Projects() {
           transition={{ duration: 0.8, delay: 0.4 }}
         >
           <motion.a
-            href="https://github.com/yourusername"
+            href="https://github.com/SACHokstack/"
             target="_blank"
             rel="noopener noreferrer"
             className="group inline-flex items-center gap-3 border border-white/20 bg-white/5 px-8 py-4 backdrop-blur-sm transition-all hover:border-white/40 hover:bg-white/10"
@@ -210,11 +213,19 @@ function ProjectStation({ project, index }: { project: Project; index: number })
                   </span>
                 </div>
 
-                {/* Placeholder Project Visual */}
-                <div className="aspect-video w-full rounded-lg bg-gradient-to-br from-gray-800 to-gray-900">
-                  <div className="flex h-full items-center justify-center">
-                    <span className="text-sm text-gray-600">Project Visual</span>
-                  </div>
+                {/* Project Visual */}
+                <div className="aspect-video w-full rounded-lg overflow-hidden">
+                  {project.image ? (
+                    <img
+                      src={project.image}
+                      alt={`${project.title} visual`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
+                      <span className="text-sm text-gray-600">Project Visual</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

@@ -42,22 +42,22 @@ export default function Skills() {
       description: 'TensorFlow, PyTorch, Scikit-learn, FastAPI',
     },
     {
-      name: 'TypeScript/JavaScript',
-      category: 'Languages',
+      name: 'RAG (Retrieval-Augmented Generation)',
+      category: 'AI/ML',
       level: 90,
-      description: 'React, Next.js, Node.js, full-stack development',
+      description: 'Implementing RAG pipelines for enhanced LLM performance',
     },
     {
-      name: 'Cloud Architecture',
-      category: 'Infrastructure',
+      name: 'Langgraph',
+      category: 'AI Agents',
       level: 85,
-      description: 'AWS, GCP, Docker, Kubernetes, serverless',
+      description: 'Building AI agent workflows and pipelines',
     },
     {
-      name: 'UI/UX Design',
-      category: 'Design',
+      name: 'MCP',
+      category: 'AI Agents',
       level: 80,
-      description: 'Human-centered design, prototyping, design systems',
+      description: 'Multi-agent coordination and planning',
     },
   ]
 

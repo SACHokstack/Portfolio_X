@@ -239,7 +239,7 @@ export default function Contact() {
                       href="mailto:your@email.com"
                       className="text-white transition-colors hover:text-cyan-400"
                     >
-                      your@email.com
+                      sachiv.csv@gmail.com
                     </a>
                   </div>
                 </div>
@@ -250,29 +250,11 @@ export default function Contact() {
                   <MapPin className="h-5 w-5 text-cyan-400" />
                   <div>
                     <div className="text-xs font-mono uppercase text-gray-400">Location</div>
-                    <div className="text-white">San Francisco, CA</div>
+                    <div className="text-white">Chennai</div>
                   </div>
                 </div>
               </div>
 
-              <div className="rounded-lg border border-white/10 bg-white/5 p-4 backdrop-blur-sm">
-                <div className="flex items-center gap-3">
-                  <Calendar className="h-5 w-5 text-cyan-400" />
-                  <div>
-                    <div className="text-xs font-mono uppercase text-gray-400">
-                      Schedule a Call
-                    </div>
-                    <a
-                      href="https://cal.com/yourusername"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-white transition-colors hover:text-cyan-400"
-                    >
-                      Book a meeting
-                    </a>
-                  </div>
-                </div>
-              </div>
             </div>
           </motion.div>
         </div>

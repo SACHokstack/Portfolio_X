@@ -160,9 +160,9 @@ export default function Hero() {
               {/* Portrait container */}
               <div className="relative h-48 w-36 overflow-hidden rounded-2xl border border-white/20 bg-gradient-to-b from-white/5 to-white/10 backdrop-blur-sm md:h-64 md:w-48">
                 <img
-                  src="/Portfolio.jpeg"
+                  src="/image copy 9.png"
                   alt="Sachiv C"
-                  className="h-full w-full object-cover grayscale"
+                  className="h-full w-full object-cover"
                 />
 
                 {/* Corner indicators */}
