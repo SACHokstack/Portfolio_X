@@ -26,6 +26,14 @@ export default function Projects() {
   // Sample projects - customize with your own
   const projects: Project[] = [
     {
+      title: 'Prometheus Lab - Autonomous AI Research Lab',
+      category: 'AI Research',
+      description: 'Cutting-edge autonomous AI research laboratory capable of conducting independent research, generating hypotheses, and executing experiments with minimal human intervention.',
+      tech: ['Python', 'LangGraph', 'Multi-Agent Systems', 'Research Automation'],
+      github: 'https://github.com/SACHokstack/Autonomous_AI_Research_Lab.git',
+      image: '/Gemini_Generated_Image_qk2jb9qk2jb9qk2j.png',
+    },
+    {
       title: 'AI-Powered News Generator',
       category: 'Machine Learning',
       description: 'Advanced NLP system generating human-quality news content across multiple formats using state-of-the-art language models and TTS.',
@@ -296,7 +304,7 @@ function ProjectStation({ project, index }: { project: Project; index: number })
       </div>
 
       {/* Connection Line to Next Station */}
-      {index < 3 && (
+      {index < 4 && (
         <motion.div
           className="absolute -bottom-16 left-1/2 -translate-x-1/2"
           initial={{ opacity: 0, scaleY: 0 }}
