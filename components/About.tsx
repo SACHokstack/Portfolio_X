@@ -1,118 +1,41 @@
 'use client'
 
 import { useRef } from 'react'
-import { motion, useInView, useScroll, useTransform } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 
 /**
- * About Section - "Approaching Planet"
- * Features scroll-triggered planet reveal with cinematic zoom effect
+ * About Section - compact profile and proof points
  */
 export default function About() {
   const sectionRef = useRef<HTMLDivElement>(null)
-  const planetRef = useRef<HTMLDivElement>(null)
   const isInView = useInView(sectionRef, { once: false, amount: 0.3 })
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  })
-
-  // Simplified parallax transformations for better performance
-  const planetScale = useTransform(scrollYProgress, [0, 0.5, 1], [0.5, 1, 1.3])
-  const planetOpacity = useTransform(scrollYProgress, [0, 0.4, 0.8, 1], [0, 1, 1, 0.6])
-  const contentY = useTransform(scrollYProgress, [0, 0.5, 1], [50, 0, -30])
-  const contentOpacity = useTransform(scrollYProgress, [0, 0.4, 0.7, 1], [0, 1, 1, 0.3])
 
   return (
     <section
       id="about"
       ref={sectionRef}
-      className="relative min-h-screen w-full overflow-hidden py-32"
+      className="relative w-full border-t border-white/10 bg-[#050608] py-28"
     >
-      {/* Planet Visual - Background */}
       <motion.div
-        ref={planetRef}
-        className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
-        style={{
-          scale: planetScale,
-          opacity: planetOpacity,
-        }}
+        className="mx-auto grid max-w-6xl gap-12 px-8 md:grid-cols-[0.9fr_1.1fr] md:items-start"
+        initial={{ opacity: 0, y: 24 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.7 }}
       >
-        {/* Planet sphere */}
-        <div className="relative h-[600px] w-[600px]">
-          {/* Outer glow ring */}
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-purple-500/30 via-blue-500/20 to-cyan-500/30 blur-3xl" />
-
-          {/* Planet surface */}
-          <div className="absolute inset-16 overflow-hidden rounded-full border border-white/10 bg-gradient-to-br from-purple-900/40 via-blue-900/30 to-indigo-950/40 backdrop-blur-sm">
-            {/* Surface texture overlays */}
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(147,51,234,0.3),transparent_50%)]" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_60%,rgba(59,130,246,0.2),transparent_40%)]" />
-
-            {/* Atmospheric rings */}
-            <div className="absolute -inset-4 rounded-full border border-cyan-400/20" />
-            <div className="absolute -inset-8 rounded-full border border-purple-400/10" />
-
-            {/* Data grid overlay */}
-            <svg className="absolute inset-0 h-full w-full opacity-20" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                  <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="0.5" />
-                </pattern>
-              </defs>
-              <rect width="100%" height="100%" fill="url(#grid)" />
-            </svg>
+        <div>
+          <div className="mb-5 flex items-center gap-3">
+            <div className="h-[1px] w-12 bg-cyan-300" />
+            <span className="text-xs font-mono uppercase tracking-[0.24em] text-cyan-300">
+              Profile
+            </span>
           </div>
-
-          {/* Orbital indicator */}
-          <motion.div
-            className="absolute -right-12 top-1/2 -translate-y-1/2"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-          >
-            <div className="h-4 w-4 rounded-full border-2 border-cyan-400 bg-cyan-400/30" />
-          </motion.div>
+          <h2 className="text-4xl font-medium tracking-tight text-white md:text-6xl">
+            AI engineer building practical medical and agentic systems.
+          </h2>
         </div>
-      </motion.div>
 
-      {/* Content Layer */}
-      <motion.div
-        className="relative z-10 mx-auto max-w-4xl px-8"
-        style={{
-          y: contentY,
-          opacity: contentOpacity,
-        }}
-      >
-        {/* Section Label */}
-        <motion.div
-          className="mb-8 flex items-center gap-3"
-          initial={{ opacity: 0, x: -20 }}
-          animate={isInView ? { opacity: 1, x: 0 } : {}}
-          transition={{ duration: 0.8 }}
-        >
-          <div className="h-[1px] w-16 bg-gradient-to-r from-cyan-400 to-transparent" />
-          <span className="text-xs font-mono uppercase tracking-[0.3em] text-cyan-400">
-            Approaching — Identity Planet
-          </span>
-        </motion.div>
-
-        {/* Main Heading */}
-        <motion.h2
-          className="mb-12 text-5xl font-light tracking-tight text-white md:text-7xl"
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.2 }}
-        >
-          About Me
-        </motion.h2>
-
-        {/* Bio Content */}
-        <motion.div
-          className="space-y-6 text-lg leading-relaxed text-gray-300"
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.4 }}
-        >
+        <div className="space-y-8">
+          <div className="space-y-5 text-base leading-8 text-gray-300 md:text-lg">
           <p>
             I'm an <span className="text-white font-medium">AI Engineer</span> and{' '}
             <span className="text-white font-medium">Creative Technologist</span> passionate about
@@ -120,58 +43,31 @@ export default function About() {
           </p>
 
           <p>
-            Not the default 21y/o but with expertise spanning machine learning, natural language processing, and human-centered
-            design.
+            My work spans medical AI, audio screening, vision fine-tuning, autonomous agents,
+            RAG systems, and product prototypes that turn research ideas into working tools.
           </p>
+          </div>
 
-          
-        </motion.div>
-
-        {/* Stats Grid */}
-        <motion.div
-          className="mt-16 grid grid-cols-2 gap-8 md:grid-cols-4"
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.6 }}
-        >
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
           {[
             { value: '10+', label: 'AI Models Tinkered' },
             { value: '5+', label: 'Projects Deployed' },
             { value: '25+', label: 'Technologies Mastered' },
             { value: '100%', label: 'Dedication Level' },
           ].map((stat) => (
-            <motion.div
+            <div
               key={stat.label}
-              className="group relative"
-              whileHover={{ scale: 1.05 }}
+              className="border border-white/10 bg-white/[0.03] p-5"
             >
-              {/* Background glow */}
-              <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-purple-500/10 to-cyan-500/10 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-
-              <div className="relative rounded-lg border border-white/10 bg-white/5 p-6 backdrop-blur-sm">
-                <div className="mb-2 text-4xl font-light text-white">{stat.value}</div>
-                <div className="text-xs font-mono uppercase tracking-wider text-gray-400">
+                <div className="mb-2 text-3xl font-medium text-white">{stat.value}</div>
+                <div className="text-xs font-mono uppercase tracking-wider text-gray-500">
                   {stat.label}
                 </div>
-              </div>
-            </motion.div>
+            </div>
           ))}
-        </motion.div>
-      </motion.div>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        className="absolute bottom-16 left-1/2 -translate-x-1/2"
-        initial={{ opacity: 0 }}
-        animate={isInView ? { opacity: 0.5 } : {}}
-        transition={{ duration: 1 }}
-      >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-        >
-          <div className="h-12 w-[1px] bg-gradient-to-b from-cyan-400/50 to-transparent" />
-        </motion.div>
+          </div>
+        </div>
       </motion.div>
     </section>
   )

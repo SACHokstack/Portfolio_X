@@ -2,7 +2,15 @@
 
 import { useRef, useState } from 'react'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
-import { Calendar, MapPin, Award, Briefcase, GraduationCap, Rocket } from 'lucide-react'
+import {
+  Calendar,
+  MapPin,
+  Award,
+  Briefcase,
+  GraduationCap,
+  Rocket,
+  ExternalLink,
+} from 'lucide-react'
 
 /**
  * Timeline Section - Vertical Journey Through Time
@@ -18,6 +26,7 @@ interface TimelineEvent {
   description: string
   type: 'education' | 'work' | 'achievement' | 'project'
   tags?: string[]
+  link?: string
 }
 
 const timelineData: TimelineEvent[] = [
@@ -42,36 +51,7 @@ const timelineData: TimelineEvent[] = [
     tags: ['AI/ML', 'Research', 'Academia'],
   },
   {
-    id: '6',
-    date: 'October 2024',
-    title: 'Top Ten in Hackathon(Wells Fargo)',
-    organization: 'TensorFlow',
-    description: 'Made Realtime Dashboard for Stock Market Predictions.',
-    type: 'project',
-    tags: ['Open Source', 'TensorFlow', 'Python'],
-  },
-  {
     id: '5',
-    date: 'Jan 2025',
-    title: 'Top Ten in hackathon(Amrita Vidhyapeetham)',
-    organization: 'GenderXAI',
-    location: 'Remote',
-    description: 'Gathered DOcuments about government to empower women added multi language speechbots.',
-    type: 'work',
-    tags: ['Computer Vision', 'PyTorch', 'AWS'],
-  },
-  {
-    id: '4',
-    date: 'Mar 2025',
-    title: 'Top Ten in Hackathon(Amrita Vidhyapeetham)',
-    organization: 'Delta Headlines',
-    location: 'Virtual',
-    description: 'Created a pipeline from ocr to News SPEECH.',
-    type: 'achievement',
-    tags: ['NLP', 'Optimization', 'Award'],
-  },
-  {
-    id: '3',
     date: 'Jun 2025',
     title: 'Hackathon Winner(15000$)',
     organization: 'BioProtocol.',
@@ -81,7 +61,7 @@ const timelineData: TimelineEvent[] = [
     tags: ['Machine Learning', 'Team Leadership', 'Knowledge Graphs'],
   },
   {
-    id: '2',
+    id: '4',
     date: 'Jul 2025',
     title: 'Jr Researcher',
     organization: 'IEEE.',
@@ -91,7 +71,7 @@ const timelineData: TimelineEvent[] = [
     tags: ['Machine Learning', 'Deep Learning', 'Knowledge Graphs'],
   },
   {
-    id: '1',
+    id: '3',
     date: 'Sep 2025',
     title: 'Jr Ai Engineer',
     organization: 'SpineDAO.',
@@ -99,6 +79,17 @@ const timelineData: TimelineEvent[] = [
     description: 'BUilding Social Network for Spine Surgeons.',
     type: 'work',
     tags: ['Machine Learning', 'Team Leadership', 'Knowledge Graphs'],
+  },
+  {
+    id: '2',
+    date: 'Feb 2026',
+    title: 'Hackathon Winner ($5,000) - Kaggle MedGemma Impact Challenge',
+    organization: 'Hosted by Google DeepMind',
+    location: 'Kaggle',
+    description: 'Won the MedGemma Impact Challenge with BigTB6, a medical AI project focused on real-world clinical impact.',
+    type: 'achievement',
+    tags: ['Google DeepMind', 'Kaggle', 'Medical AI', 'MedGemma'],
+    link: 'https://www.kaggle.com/competitions/med-gemma-impact-challenge/writeups/bigtb6',
   },
 ]
 
@@ -151,7 +142,7 @@ export default function Timeline() {
     <section
       id="timeline"
       ref={sectionRef}
-      className="relative min-h-screen w-full overflow-hidden py-32"
+      className="relative w-full border-t border-white/10 bg-[#07080b] py-28"
     >
       {/* Content Container */}
       <div className="relative z-10 mx-auto max-w-6xl px-8">
@@ -163,14 +154,14 @@ export default function Timeline() {
           transition={{ duration: 0.8 }}
         >
           <div className="h-[1px] w-16 bg-gradient-to-r from-cyan-400 to-transparent" />
-          <span className="text-xs font-mono uppercase tracking-[0.3em] text-cyan-400">
-            Temporal Coordinates — Journey Timeline
+          <span className="text-xs font-mono uppercase tracking-[0.24em] text-cyan-400">
+            Milestones
           </span>
         </motion.div>
 
         {/* Main Heading */}
         <motion.h2
-          className="mb-20 text-5xl font-light tracking-tight text-white md:text-7xl"
+          className="mb-16 text-4xl font-medium tracking-tight text-white md:text-6xl"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -183,11 +174,11 @@ export default function Timeline() {
           {/* Vertical Timeline Line */}
           <div
             ref={lineRef}
-            className="absolute left-8 top-0 bottom-0 w-[2px] bg-white/10 md:left-1/2"
+            className="absolute left-8 top-0 bottom-0 w-[1px] bg-white/10 md:left-1/2"
           >
             {/* Animated progress line */}
             <motion.div
-              className="absolute left-0 top-0 w-full bg-gradient-to-b from-cyan-400 via-purple-500 to-blue-500"
+              className="absolute left-0 top-0 w-full bg-cyan-300"
               style={{ height: lineHeight }}
             />
 
@@ -196,12 +187,12 @@ export default function Timeline() {
               className="absolute left-1/2 -translate-x-1/2"
               style={{ top: lineHeight }}
             >
-              <div className="h-3 w-3 rounded-full bg-cyan-400 shadow-[0_0_20px_rgba(102,252,241,0.8)]" />
+              <div className="h-2 w-2 bg-cyan-300" />
             </motion.div>
           </div>
 
           {/* Timeline Events */}
-          <div className="space-y-16">
+          <div className="space-y-10">
             {timelineData.map((event, index) => (
               <TimelineEventCard
                 key={event.id}
@@ -258,24 +249,20 @@ function TimelineEventCard({
     >
       {/* Mobile/Tablet Layout: All cards on right */}
       <div className="ml-16 w-full md:ml-0 md:w-[calc(50%-3rem)]">
-        <motion.button
+        <motion.div
+          role="button"
+          tabIndex={0}
           onClick={onToggle}
-          className="group relative w-full overflow-hidden rounded-xl border border-white/10 bg-white/5 p-6 text-left backdrop-blur-xl transition-all hover:border-white/20 hover:bg-white/10"
-          whileHover={{ scale: 1.02 }}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault()
+              onToggle()
+            }
+          }}
+          className="group relative w-full cursor-pointer border border-white/10 bg-white/[0.035] p-6 text-left transition-all hover:border-white/20 hover:bg-white/[0.055]"
+          whileHover={{ y: -2 }}
           whileTap={{ scale: 0.98 }}
         >
-          {/* Holographic scan effect */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-            animate={{ x: ['-100%', '200%'] }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: 'linear',
-              repeatDelay: 2,
-            }}
-          />
-
           <div className="relative">
             {/* Date Badge */}
             <div className="mb-4 flex items-center gap-2">
@@ -286,7 +273,7 @@ function TimelineEventCard({
             </div>
 
             {/* Title */}
-            <h3 className="mb-2 text-xl font-medium text-white md:text-2xl">
+            <h3 className="mb-2 text-xl font-medium leading-snug text-white md:text-2xl">
               {event.title}
             </h3>
 
@@ -323,12 +310,25 @@ function TimelineEventCard({
                   {event.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-gray-400"
+                    className="border border-white/10 bg-white/[0.035] px-3 py-1 text-xs text-gray-400"
                     >
                       {tag}
                     </span>
                   ))}
                 </div>
+              )}
+
+              {event.link && (
+                <a
+                  href={event.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-cyan-400 transition-colors hover:text-white"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  View Kaggle Writeup
+                  <ExternalLink className="h-4 w-4" />
+                </a>
               )}
             </motion.div>
 
@@ -343,7 +343,7 @@ function TimelineEventCard({
               </motion.div>
             </div>
           </div>
-        </motion.button>
+        </motion.div>
       </div>
 
       {/* Timeline Node - Positioned absolutely for desktop */}
@@ -354,19 +354,11 @@ function TimelineEventCard({
         transition={{ duration: 0.5, delay: index * 0.1 + 0.2 }}
       >
         <div className="relative">
-          {/* Outer pulse ring */}
-          <motion.div
-            className="absolute inset-0 rounded-full bg-gradient-to-br opacity-30 blur-lg"
-            style={{ background: `linear-gradient(135deg, var(--tw-gradient-stops))` }}
-            animate={{ scale: [1, 1.3, 1] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-          />
-
           {/* Node circle */}
           <div
-            className={`relative h-12 w-12 rounded-full border-2 border-white/20 bg-gradient-to-br ${getColor(
+            className={`relative h-11 w-11 border border-white/15 bg-gradient-to-br ${getColor(
               event.type
-            )} p-2.5 shadow-lg`}
+            )} p-2.5`}
           >
             <Icon className="h-full w-full text-white" />
           </div>

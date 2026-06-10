@@ -1,12 +1,12 @@
 'use client'
 
 import { useRef } from 'react'
-import { motion, useInView, useScroll, useTransform } from 'framer-motion'
+import Image from 'next/image'
+import { motion, useInView } from 'framer-motion'
 import { ExternalLink, Github } from 'lucide-react'
 
 /**
- * Projects Section - Space Stations
- * Each project appears as a space station with cinematic scroll transitions
+ * Projects Section - case-study style featured work
  */
 
 interface Project {
@@ -14,8 +14,13 @@ interface Project {
   category: string
   description: string
   tech: string[]
+  highlights?: string[]
   link?: string
   github?: string
+  extraLinks?: {
+    label: string
+    href: string
+  }[]
   image?: string
 }
 
@@ -31,23 +36,46 @@ export default function Projects() {
       description: 'Cutting-edge autonomous AI research laboratory capable of conducting independent research, generating hypotheses, and executing experiments with minimal human intervention.',
       tech: ['Python', 'LangGraph', 'Multi-Agent Systems', 'Research Automation'],
       github: 'https://github.com/SACHokstack/Autonomous_AI_Research_Lab.git',
-      image: '/Gemini_Generated_Image_qk2jb9qk2jb9qk2j.png',
     },
     {
-      title: 'AI-Powered News Generator',
-      category: 'Machine Learning',
-      description: 'Advanced NLP system generating human-quality news content across multiple formats using state-of-the-art language models and TTS.',
-      tech: ['Python', 'GPT-4', 'FastAPI', 'React'],
-      github: 'https://github.com/SACHokstack/NewsAgent',
-      image: '/no.jpeg',
+      title: 'HeAR-TB - TB Cough Screening with Google HeAR',
+      category: 'Medical AI',
+      description: 'Domain-aware dual-head model for tuberculosis cough screening. It keeps Google HeAR frozen, trains separate experts for natural and forced coughs, then averages patient-level risk scores for a final TB screening signal.',
+      tech: ['Google HeAR', 'Python', 'Audio ML', 'Medical AI', 'Hugging Face'],
+      highlights: ['Patient AUC 0.7476 +/- 0.0932', 'Sensitivity ~0.78-0.83', 'Accuracy 0.728 +/- 0.060'],
+      link: 'https://big-tb6.vercel.app/',
+      github: 'https://github.com/SACHokstack/Hear--Cough-Finetuning',
+      extraLinks: [
+        {
+          label: 'Video Demo',
+          href: 'https://youtu.be/ubBDRxCwaeE',
+        },
+        {
+          label: 'Model',
+          href: 'https://huggingface.co/sach3v/Domain_aware_dual_head_HEar',
+        },
+        {
+          label: 'Dataset',
+          href: 'https://zenodo.org/records/10431329',
+        },
+      ],
     },
     {
-      title: 'Real-Time Data Scrapping Platform',
-      category: 'Full-Stack',
-      description: 'Scrapping and aggregating data from 50+ sources in real-time from Districts of TamilNadu.',
-      tech: ['Selenium', 'beautifulsoup', 'PostgreSQL', 'Redis'],
-      github: 'https://github.com/SACHokstack/Resort_Extraction',
-      image: '/scrape.jpeg',
+      title: 'Gemma 4 E2B Oral Cancer Vision Fine-Tuning',
+      category: 'Medical Vision AI',
+      description: 'Fine-tuned Gemma 4 E2B for oral-cancer visual identification using a custom oral YOLO dataset, focused on supporting medical image screening workflows.',
+      tech: ['Gemma 4 E2B', 'Vision Fine-Tuning', 'YOLO Dataset', 'Medical AI', 'Hugging Face'],
+      highlights: ['Oral cancer visual screening', 'Custom dataset pipeline', 'Model hosted on Hugging Face'],
+      extraLinks: [
+        {
+          label: 'Model',
+          href: 'https://huggingface.co/sach3v/Gemma-4-e2b-custom-oral_cancer/tree/main',
+        },
+        {
+          label: 'Dataset',
+          href: 'https://huggingface.co/datasets/sach3v/oral-yolo-dataset',
+        },
+      ],
     },
     {
       title: 'Autonomous Chronos Discord Bot',
@@ -57,21 +85,13 @@ export default function Projects() {
       github: 'https://github.com/SACHokstack/DISCORDxCHRONOS',
       image: '/discord.jpeg',
     },
-    {
-      title: 'MCP Server for Puch_AI',
-      category: 'MCP',
-      description: 'Model context protocol server enabling multi-agent coordination and planning for AI systems.',
-      tech: [' Langgraph', 'Python'],
-      github: 'https://github.com/SACHokstack/MCPrailway',
-      image: '/ro.jpeg',
-    },
   ]
 
   return (
     <section
       id="projects"
       ref={sectionRef}
-      className="relative min-h-screen w-full overflow-hidden py-32"
+      className="relative w-full border-t border-white/10 bg-[#050608] py-28"
     >
       {/* Content Container */}
       <div className="relative z-10 mx-auto max-w-7xl px-8">
@@ -83,14 +103,14 @@ export default function Projects() {
           transition={{ duration: 0.8 }}
         >
           <div className="h-[1px] w-16 bg-gradient-to-r from-blue-400 to-transparent" />
-          <span className="text-xs font-mono uppercase tracking-[0.3em] text-blue-400">
-            Space Stations — Project Archive
+          <span className="text-xs font-mono uppercase tracking-[0.24em] text-blue-400">
+            Selected Work
           </span>
         </motion.div>
 
         {/* Main Heading */}
         <motion.h2
-          className="mb-20 text-5xl font-light tracking-tight text-white md:text-7xl"
+          className="mb-16 text-4xl font-medium tracking-tight text-white md:text-6xl"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.2 }}
@@ -99,7 +119,7 @@ export default function Projects() {
         </motion.h2>
 
         {/* Projects Grid */}
-        <div className="space-y-32">
+        <div className="space-y-20">
           {projects.map((project, index) => (
             <ProjectStation key={project.title} project={project} index={index} />
           ))}
@@ -107,7 +127,7 @@ export default function Projects() {
 
         {/* View More CTA */}
         <motion.div
-          className="mt-32 text-center"
+          className="mt-20 text-center"
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.4 }}
@@ -116,7 +136,7 @@ export default function Projects() {
             href="https://github.com/SACHokstack/"
             target="_blank"
             rel="noopener noreferrer"
-            className="group inline-flex items-center gap-3 border border-white/20 bg-white/5 px-8 py-4 backdrop-blur-sm transition-all hover:border-white/40 hover:bg-white/10"
+            className="group inline-flex items-center gap-3 border border-white/15 bg-white/[0.04] px-8 py-4 transition-all hover:border-white/35 hover:bg-white/[0.07]"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
@@ -138,134 +158,100 @@ function ProjectStation({ project, index }: { project: Project; index: number })
   const stationRef = useRef<HTMLDivElement>(null)
   const isInView = useInView(stationRef, { once: false, amount: 0.5 })
 
-  const { scrollYProgress } = useScroll({
-    target: stationRef,
-    offset: ['start end', 'end start'],
-  })
-
-  // Parallax effects
-  const y = useTransform(scrollYProgress, [0, 1], [100, -100])
-  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0, 1, 1, 0])
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.9])
-
   const isEven = index % 2 === 0
 
   return (
     <motion.div
       ref={stationRef}
       className="relative"
-      style={{ opacity }}
+      initial={{ opacity: 0, y: 32 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7 }}
     >
-      <div
-        className={`flex flex-col gap-12 md:flex-row md:items-center ${
-          isEven ? '' : 'md:flex-row-reverse'
-        }`}
-      >
-        {/* Space Station Visual */}
-        <motion.div
-          className="flex-1"
-          style={{ y, scale }}
-        >
-          <div className="group relative">
-            {/* Outer glow ring */}
-            <div className="absolute -inset-8 rounded-2xl bg-gradient-to-br from-blue-500/20 via-purple-500/10 to-cyan-500/20 opacity-0 blur-3xl transition-opacity duration-500 group-hover:opacity-100" />
-
-            {/* Station Container */}
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-gradient-to-br from-white/5 to-white/10 p-8 backdrop-blur-sm">
-              {/* Holographic scan lines */}
-              <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-cyan-400/5 to-transparent"
-                animate={{ x: ['-100%', '200%'] }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: 'linear',
-                  repeatDelay: 2,
-                }}
-              />
-
-              {/* Station Grid Pattern */}
-              <svg
-                className="absolute inset-0 h-full w-full opacity-10"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <defs>
-                  <pattern
-                    id={`station-grid-${index}`}
-                    width="30"
-                    height="30"
-                    patternUnits="userSpaceOnUse"
-                  >
-                    <path
-                      d="M 30 0 L 0 0 0 30"
-                      fill="none"
-                      stroke="rgba(255,255,255,0.3)"
-                      strokeWidth="0.5"
-                    />
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill={`url(#station-grid-${index})`} />
-              </svg>
-
-              {/* Station Details */}
-              <div className="relative space-y-4">
-                {/* Status Indicators */}
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <div className="h-2 w-2 animate-pulse rounded-full bg-cyan-400" />
-                    <span className="text-xs font-mono text-gray-400">ACTIVE</span>
-                  </div>
-                  <div className="h-4 w-[1px] bg-white/20" />
-                  <span className="text-xs font-mono text-gray-500">
-                    STATION-{String(index + 1).padStart(3, '0')}
-                  </span>
-                </div>
-
-                {/* Project Visual */}
-                <div className="aspect-video w-full rounded-lg overflow-hidden">
+      <div className="grid gap-10 border-t border-white/10 pt-12 md:grid-cols-2 md:items-center">
+        <div className={`${isEven ? '' : 'md:order-2'}`}>
+          <div className="border border-white/10 bg-white/[0.035] p-3">
+                <div className="relative aspect-video w-full overflow-hidden bg-black">
                   {project.image ? (
-                    <img
+                    <Image
                       src={project.image}
                       alt={`${project.title} visual`}
-                      className="w-full h-full object-cover"
+                      fill
+                      sizes="(min-width: 768px) 50vw, 100vw"
+                      className="object-cover"
                     />
                   ) : (
-                    <div className="flex h-full items-center justify-center bg-gradient-to-br from-gray-800 to-gray-900">
-                      <span className="text-sm text-gray-600">Project Visual</span>
+                    <div className="relative flex h-full items-center justify-center overflow-hidden bg-gradient-to-br from-cyan-950/60 via-slate-950 to-purple-950/50">
+                      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(34,211,238,0.18),transparent_55%)]" />
+                      <div className="relative flex h-28 items-end gap-2">
+                        {[42, 70, 52, 96, 64, 84, 48, 76, 56].map((height, barIndex) => (
+                          <motion.div
+                            key={barIndex}
+                            className="w-2 rounded-full bg-cyan-300/70 shadow-[0_0_16px_rgba(103,232,249,0.35)]"
+                            style={{ height }}
+                            animate={{ scaleY: [0.65, 1, 0.72] }}
+                            transition={{
+                              duration: 1.8,
+                              repeat: Infinity,
+                              ease: 'easeInOut',
+                              delay: barIndex * 0.08,
+                            }}
+                          />
+                        ))}
+                      </div>
+                      <div className="absolute bottom-4 left-4 border border-cyan-300/20 bg-black/60 px-3 py-1">
+                        <span className="text-xs font-mono uppercase tracking-wider text-cyan-200">
+                          {project.category}
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>
-              </div>
-            </div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Project Details */}
         <motion.div
-          className="flex-1 space-y-6"
+          className={`space-y-6 ${isEven ? '' : 'md:order-1'}`}
           initial={{ opacity: 0, x: isEven ? 50 : -50 }}
           animate={isInView ? { opacity: 1, x: 0 } : {}}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
           {/* Category Badge */}
-          <div className="inline-block rounded border border-blue-400/30 bg-blue-400/10 px-3 py-1">
-            <span className="text-xs font-mono uppercase tracking-wider text-blue-400">
+          <div className="inline-block border border-blue-400/20 bg-blue-400/5 px-3 py-1">
+            <span className="text-xs font-mono uppercase tracking-wider text-blue-300">
               {project.category}
             </span>
           </div>
 
           {/* Project Title */}
-          <h3 className="text-3xl font-light text-white md:text-4xl">{project.title}</h3>
+          <h3 className="text-3xl font-medium leading-tight text-white md:text-4xl">{project.title}</h3>
 
           {/* Description */}
           <p className="text-lg leading-relaxed text-gray-300">{project.description}</p>
+
+          {/* Proof Highlights */}
+          {project.highlights && (
+            <div className="grid gap-3 sm:grid-cols-3">
+              {project.highlights.map((highlight) => (
+                <div
+                  key={highlight}
+                  className="border border-cyan-400/15 bg-cyan-400/[0.04] px-3 py-2"
+                >
+                  <span className="text-xs font-mono leading-relaxed text-cyan-200">
+                    {highlight}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
 
           {/* Tech Stack */}
           <div className="flex flex-wrap gap-2">
             {project.tech.map((tech) => (
               <span
                 key={tech}
-                className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-mono text-gray-400"
+                className="border border-white/10 bg-white/[0.035] px-3 py-1 text-xs font-mono text-gray-400"
               >
                 {tech}
               </span>
@@ -273,7 +259,7 @@ function ProjectStation({ project, index }: { project: Project; index: number })
           </div>
 
           {/* Project Links */}
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             {project.link && (
               <motion.a
                 href={project.link}
@@ -286,6 +272,20 @@ function ProjectStation({ project, index }: { project: Project; index: number })
                 <ExternalLink className="h-4 w-4" />
               </motion.a>
             )}
+
+            {project.extraLinks?.map((extraLink) => (
+              <motion.a
+                key={extraLink.href}
+                href={extraLink.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-2 text-sm font-medium text-gray-400 transition-colors hover:text-cyan-400"
+                whileHover={{ x: 5 }}
+              >
+                <span>{extraLink.label}</span>
+                <ExternalLink className="h-4 w-4" />
+              </motion.a>
+            ))}
 
             {project.github && (
               <motion.a
@@ -302,18 +302,6 @@ function ProjectStation({ project, index }: { project: Project; index: number })
           </div>
         </motion.div>
       </div>
-
-      {/* Connection Line to Next Station */}
-      {index < 4 && (
-        <motion.div
-          className="absolute -bottom-16 left-1/2 -translate-x-1/2"
-          initial={{ opacity: 0, scaleY: 0 }}
-          animate={isInView ? { opacity: 0.3, scaleY: 1 } : {}}
-          transition={{ duration: 1, delay: 0.5 }}
-        >
-          <div className="h-16 w-[1px] bg-gradient-to-b from-cyan-400/50 to-transparent" />
-        </motion.div>
-      )}
     </motion.div>
   )
 }
