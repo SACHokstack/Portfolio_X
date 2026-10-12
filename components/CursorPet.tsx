@@ -4,10 +4,12 @@ import { useEffect, useRef } from 'react'
 import { useTheme } from 'next-themes'
 
 /**
- * CursorPet — a tiny cat that chases your cursor, oneko-style.
- * - Desktop only (pointer: fine), disabled with prefers-reduced-motion
- * - Sits when idle, sleeps (with Zzz) after ~5s of no mouse movement
- * - Theme-aware: dark cat on light mode, light cat on dark mode
+ * CursorPet — a tiny cat that WALKS along the bottom of your screen,
+ * following your cursor's x position. Oneko-style, but grounded.
+ * - Click anywhere and it hops with joy
+ * - Sits when idle, sleeps (with Zzz) after ~6s of no mouse movement
+ * - Kicks up little dust puffs while walking
+ * - Theme-aware, desktop-only, off for prefers-reduced-motion
  */
 export default function CursorPet() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -27,26 +29,40 @@ export default function CursorPet() {
     const g: CanvasRenderingContext2D = ctx
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2)
-    const BOX = 64
-    canvas.width = BOX * dpr
-    canvas.height = BOX * dpr
+    const fit = () => {
+      el.width = window.innerWidth * dpr
+      el.height = window.innerHeight * dpr
+    }
+    fit()
+    window.addEventListener('resize', fit)
 
-    let x = window.innerWidth - 100
-    let y = window.innerHeight - 100
-    let tx = x
-    let ty = y
+    const floor = () => window.innerHeight - 26
+
+    let x = window.innerWidth - 120
+    let targetX = x
     let lastMouseMove = performance.now()
-    let dir = 1
+    let dir = -1
     let step = 0
+    let jy = 0 // jump height (px above floor)
+    let vy = 0
     let raf = 0
     let running = true
+    let frame = 0
+
+    type Puff = { x: number; y: number; vx: number; life: number }
+    let puffs: Puff[] = []
 
     const onMove = (e: MouseEvent) => {
-      tx = e.clientX
-      ty = e.clientY
+      targetX = e.clientX
+      lastMouseMove = performance.now()
+    }
+    const onClick = () => {
+      // hop! only when grounded
+      if (jy === 0) vy = 6.5
       lastMouseMove = performance.now()
     }
     window.addEventListener('mousemove', onMove)
+    window.addEventListener('mousedown', onClick)
 
     const onVis = () => {
       if (document.hidden) {
@@ -62,74 +78,120 @@ export default function CursorPet() {
 
     function loop(now: number) {
       if (!running) return
+      frame++
 
-      const dx = tx - x
-      const dy = ty - y
-      const dist = Math.hypot(dx, dy)
+      const dx = targetX - x
       const idleFor = now - lastMouseMove
-      const sleeping = idleFor > 5000 && dist < 40
-      const moving = !sleeping && dist > 28
+      const sleeping = idleFor > 6000
+      // leisurely pace: slow base, slight hurry when far
+      const speed = Math.min(3, 1.3 + Math.abs(dx) / 400)
+      const moving = !sleeping && Math.abs(dx) > 12 && jy === 0
 
       if (moving) {
-        if (Math.abs(dx) > 4) dir = dx > 0 ? 1 : -1
-        const speed = Math.min(7, dist / 6)
-        x += (dx / dist) * speed
-        y += (dy / dist) * speed
-        step += speed / 3
+        dir = dx > 0 ? 1 : -1
+        x += Math.sign(dx) * Math.min(speed, Math.abs(dx))
+        step += speed / 4
+        // dust puff every few frames
+        if (frame % 5 === 0) {
+          puffs.push({
+            x: x - dir * 14,
+            y: floor() - 2,
+            vx: -dir * (0.5 + Math.random() * 0.5),
+            life: 1,
+          })
+        }
       }
 
-      el.style.transform = `translate(${x - 20}px, ${y - 20}px)`
-      draw(now, moving, sleeping)
+      // jump physics
+      if (vy !== 0 || jy > 0) {
+        jy += vy
+        vy -= 0.55
+        if (jy <= 0) {
+          jy = 0
+          vy = 0
+          // landing poof
+          for (let i = 0; i < 4; i++) {
+            puffs.push({
+              x: x + (Math.random() - 0.5) * 20,
+              y: floor() - 2,
+              vx: (Math.random() - 0.5) * 1.5,
+              life: 1,
+            })
+          }
+        }
+      }
 
+      puffs = puffs.filter((p) => p.life > 0)
+      for (const p of puffs) {
+        p.x += p.vx
+        p.y -= 0.4
+        p.life -= 0.04
+      }
+
+      draw(now, moving, sleeping)
       raf = requestAnimationFrame(loop)
     }
 
     function draw(now: number, moving: boolean, sleeping: boolean) {
-      const color = themeRef.current === 'dark' ? '#e7e5e4' : '#1c1917'
+      const dark = themeRef.current === 'dark'
+      const color = dark ? '#e7e5e4' : '#1c1917'
+      const soft = dark ? '#a8a29e' : '#78716c'
       g.setTransform(dpr, 0, 0, dpr, 0, 0)
-      g.clearRect(0, 0, BOX, BOX)
+      g.clearRect(0, 0, window.innerWidth, window.innerHeight)
+
+      // dust puffs
+      for (const p of puffs) {
+        g.globalAlpha = Math.max(0, p.life) * 0.5
+        g.fillStyle = soft
+        g.beginPath()
+        g.arc(p.x, p.y, 2.5 + (1 - p.life) * 2.5, 0, Math.PI * 2)
+        g.fill()
+      }
+      g.globalAlpha = 1
+
       g.fillStyle = color
       g.strokeStyle = color
       g.lineWidth = 2
       g.lineCap = 'round'
 
-      // local coords: cat faces +x, flip by dir
+      const fy = floor() - jy
+      const squash = jy > 0 ? 1 + Math.min(0.18, Math.abs(vy) * 0.02) : 1
+
       g.save()
-      g.translate(32, 34)
-      g.scale(dir, 1)
+      g.translate(x, fy)
+      g.scale(dir * (2 - squash), squash)
 
       if (sleeping) {
-        // curled loaf: body ellipse + wrapped tail + closed eye + Zzz
+        // curled loaf on the floor
         g.beginPath()
-        g.ellipse(0, 8, 15, 8, 0, 0, Math.PI * 2)
+        g.ellipse(0, -8, 15, 8, 0, 0, Math.PI * 2)
         g.fill()
-        // head resting on body
         g.beginPath()
-        g.arc(10, 2, 8, 0, Math.PI * 2)
+        g.arc(10, -14, 8, 0, Math.PI * 2)
         g.fill()
         // ears
         g.beginPath()
-        g.moveTo(4, -3)
-        g.lineTo(5, -10)
-        g.lineTo(10, -4)
+        g.moveTo(4, -19)
+        g.lineTo(5, -26)
+        g.lineTo(10, -20)
         g.closePath()
         g.fill()
         g.beginPath()
-        g.moveTo(12, -4)
-        g.lineTo(15, -10)
-        g.lineTo(17, -3)
+        g.moveTo(12, -20)
+        g.lineTo(15, -26)
+        g.lineTo(17, -19)
         g.closePath()
         g.fill()
         // tail wrapped across front
         g.beginPath()
-        g.moveTo(-14, 10)
-        g.quadraticCurveTo(0, 16, 16, 8)
+        g.moveTo(-14, -6)
+        g.quadraticCurveTo(0, 0, 16, -8)
         g.stroke()
         // closed eye
         g.lineWidth = 1.6
         g.beginPath()
-        g.moveTo(8, 2)
-        g.lineTo(13, 2)
+        g.moveTo(8, -14)
+        g.lineTo(13, -14)
         g.stroke()
         g.restore()
 
@@ -138,66 +200,74 @@ export default function CursorPet() {
         g.fillStyle = color
         g.globalAlpha = 0.9 * (1 - t)
         g.font = 'bold 11px system-ui, sans-serif'
-        g.fillText('z', 40 + t * 10, 18 - t * 14)
+        g.fillText('z', x + 8 + t * 10, fy - 34 - t * 14)
         g.globalAlpha = 0.6 * (1 - t)
         g.font = 'bold 8px system-ui, sans-serif'
-        g.fillText('z', 44 + t * 8, 24 - t * 10)
+        g.fillText('z', x + 12 + t * 8, fy - 28 - t * 10)
         g.globalAlpha = 1
         return
       }
 
-      const bob = moving ? Math.sin(step * 2) * 1.2 : Math.sin(now / 600) * 0.5
-      const swing = moving ? Math.sin(step * 2) * 3 : 0
+      const bob = moving ? Math.abs(Math.sin(step * 2)) * -2 : Math.sin(now / 600) * 0.5
+      const swing = moving ? Math.sin(step * 2) * 3.5 : 0
 
-      // tail (wags faster when running)
-      const wagSpeed = moving ? 90 : 350
-      const wag = Math.sin(now / wagSpeed) * (moving ? 5 : 3)
+      // tail (wags while walking, slow sway when sitting)
+      const wag = Math.sin(now / (moving ? 110 : 400)) * (moving ? 5 : 3)
       g.beginPath()
-      g.moveTo(-13, 6 + bob * 0.4)
-      g.quadraticCurveTo(-22, 2 + wag, -20, -8 + wag)
+      g.moveTo(-13, -10)
+      g.quadraticCurveTo(-23, -14 + wag, -21, -24 + wag)
       g.stroke()
 
-      // legs (alternate when moving)
-      g.fillRect(-9, 8 + swing * 0.5, 4.5, 8 - swing * 0.3)
-      g.fillRect(4, 8 - swing * 0.5, 4.5, 8 + swing * 0.3)
+      // legs — alternate strides when walking, planted when sitting
+      if (moving) {
+        g.fillRect(-9, -8 + Math.max(0, swing) * 0.6, 4.5, 8)
+        g.fillRect(4, -8 + Math.max(0, -swing) * 0.6, 4.5, 8)
+      } else {
+        // sitting: haunches
+        g.beginPath()
+        g.ellipse(-4, -6, 9, 6, 0, 0, Math.PI * 2)
+        g.fill()
+      }
 
       // body
       g.beginPath()
-      g.ellipse(0, 2 + bob, 14, 8, 0, 0, Math.PI * 2)
+      g.ellipse(0, -14 + bob, 14, 8, 0, 0, Math.PI * 2)
       g.fill()
 
       // head
       g.beginPath()
-      g.arc(11, -4 + bob, 8.5, 0, Math.PI * 2)
+      g.arc(11, -20 + bob, 8.5, 0, Math.PI * 2)
       g.fill()
 
-      // ears
+      // ears (perk up while walking)
+      const perk = moving ? -1.5 : 0
       g.beginPath()
-      g.moveTo(5, -9 + bob)
-      g.lineTo(6, -17 + bob)
-      g.lineTo(11, -10 + bob)
+      g.moveTo(5, -25 + bob + perk)
+      g.lineTo(6, -33 + bob + perk)
+      g.lineTo(11, -26 + bob)
       g.closePath()
       g.fill()
       g.beginPath()
-      g.moveTo(13, -10 + bob)
-      g.lineTo(16, -17 + bob)
-      g.lineTo(18, -9 + bob)
+      g.moveTo(13, -26 + bob)
+      g.lineTo(16, -33 + bob + perk)
+      g.lineTo(18, -25 + bob)
       g.closePath()
       g.fill()
 
       // eye (blinks every ~4s)
       const blink = now % 4200 < 150
-      g.strokeStyle = themeRef.current === 'dark' ? '#0c0a09' : '#fafaf9'
+      const eyeColor = dark ? '#0c0a09' : '#fafaf9'
       g.lineWidth = 1.8
       if (blink) {
+        g.strokeStyle = eyeColor
         g.beginPath()
-        g.moveTo(11, -4 + bob)
-        g.lineTo(15, -4 + bob)
+        g.moveTo(11, -20 + bob)
+        g.lineTo(15, -20 + bob)
         g.stroke()
       } else {
-        g.fillStyle = themeRef.current === 'dark' ? '#0c0a09' : '#fafaf9'
+        g.fillStyle = eyeColor
         g.beginPath()
-        g.arc(13, -4.5 + bob, 1.4, 0, Math.PI * 2)
+        g.arc(13, -20.5 + bob, 1.4, 0, Math.PI * 2)
         g.fill()
       }
 
@@ -209,6 +279,8 @@ export default function CursorPet() {
       running = false
       cancelAnimationFrame(raf)
       window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('mousedown', onClick)
+      window.removeEventListener('resize', fit)
       document.removeEventListener('visibilitychange', onVis)
     }
   }, [])
@@ -217,7 +289,7 @@ export default function CursorPet() {
     <canvas
       ref={canvasRef}
       aria-hidden
-      className="pointer-events-none fixed left-0 top-0 z-[60] h-10 w-10"
+      className="pointer-events-none fixed inset-0 z-[60] h-full w-full"
     />
   )
 }
