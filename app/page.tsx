@@ -51,10 +51,7 @@ export default function Home() {
       <section>
         <SectionHeader title="Work" href="/work" />
         <ul className="divide-y divide-neutral-100 border-y border-neutral-100 dark:divide-neutral-800 dark:border-neutral-800">
-          {jobs
-            .filter((j) => j.kind !== 'education')
-            .slice(0, 4)
-            .map((j) => (
+          {jobs.slice(0, 4).map((j) => (
             <li key={j.company + j.role} className="flex items-baseline justify-between gap-4 py-3">
               <span className="text-[15px]">
                 {j.role}{' '}

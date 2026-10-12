@@ -6,7 +6,7 @@ export default function WorkPage() {
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">Work</h1>
         <p className="mt-2 text-neutral-500 dark:text-neutral-400">
-          Experience, freelance, research, education — one timeline.
+          Experience, freelance, and research — one timeline.
         </p>
       </div>
 

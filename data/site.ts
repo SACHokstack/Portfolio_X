@@ -38,7 +38,7 @@ export type Project = {
   extraLinks?: { label: string; href: string }[]
 }
 
-export type JobKind = 'fulltime' | 'freelance' | 'research' | 'education'
+export type JobKind = 'fulltime' | 'freelance' | 'research'
 
 export type Job = {
   company: string
@@ -54,7 +54,6 @@ export const jobGroups: { kind: JobKind; label: string }[] = [
   { kind: 'fulltime', label: 'Experience' },
   { kind: 'freelance', label: 'Freelance' },
   { kind: 'research', label: 'Research' },
-  { kind: 'education', label: 'Education' },
 ]
 
 // Source of truth: resume (Oct 2026).
@@ -85,22 +84,6 @@ export const jobs: Job[] = [
     summary:
       'Cut accelerator memory for a large 3D nnU-Net segmentation model by redesigning multi-channel inputs as single-channel, improving GPU training efficiency.',
     kind: 'research',
-  },
-  {
-    company: 'Anna University (RCC), Coimbatore',
-    role: 'B.Tech, AI & Data Science',
-    period: '2022 — 2026',
-    location: 'Coimbatore, TN',
-    summary: 'Undergraduate degree in Artificial Intelligence & Data Science.',
-    kind: 'education',
-  },
-  {
-    company: 'IIT Madras',
-    role: 'B.Sc. Data Science (Online)',
-    period: '2022 — Present',
-    location: 'Remote',
-    summary: 'Online degree in Data Science alongside B.Tech.',
-    kind: 'education',
   },
 ]
 
