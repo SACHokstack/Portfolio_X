@@ -36,10 +36,10 @@ export default function CursorPet() {
     fit()
     window.addEventListener('resize', fit)
 
-    const floor = () => window.innerHeight - 26
-
     let x = window.innerWidth - 120
+    let y = window.innerHeight - 120
     let targetX = x
+    let targetY = y
     let lastMouseMove = performance.now()
     let dir = -1
     let step = 0
@@ -54,6 +54,7 @@ export default function CursorPet() {
 
     const onMove = (e: MouseEvent) => {
       targetX = e.clientX
+      targetY = e.clientY
       lastMouseMove = performance.now()
     }
     const onClick = () => {
@@ -81,21 +82,26 @@ export default function CursorPet() {
       frame++
 
       const dx = targetX - x
+      const dy = targetY - y
+      const dist = Math.hypot(dx, dy)
       const idleFor = now - lastMouseMove
-      const sleeping = idleFor > 6000
+      const sleeping = idleFor > 6000 && dist < 60
       // leisurely pace: slow base, slight hurry when far
-      const speed = Math.min(3, 1.3 + Math.abs(dx) / 400)
-      const moving = !sleeping && Math.abs(dx) > 12 && jy === 0
+      const speed = Math.min(2.6, 0.9 + dist / 350)
+      const moving = !sleeping && dist > 30
 
       if (moving) {
-        dir = dx > 0 ? 1 : -1
-        x += Math.sign(dx) * Math.min(speed, Math.abs(dx))
+        if (Math.abs(dx) > 4) dir = dx > 0 ? 1 : -1
+        const stepLen = Math.min(speed, dist)
+        x += (dx / dist) * stepLen
+        y += (dy / dist) * stepLen
+        y = Math.min(Math.max(y, 50), window.innerHeight - 30)
         step += speed / 4
         // dust puff every few frames
-        if (frame % 5 === 0) {
+        if (frame % 6 === 0) {
           puffs.push({
             x: x - dir * 14,
-            y: floor() - 2,
+            y: y - 2,
             vx: -dir * (0.5 + Math.random() * 0.5),
             life: 1,
           })
@@ -113,7 +119,7 @@ export default function CursorPet() {
           for (let i = 0; i < 4; i++) {
             puffs.push({
               x: x + (Math.random() - 0.5) * 20,
-              y: floor() - 2,
+              y: y - 2,
               vx: (Math.random() - 0.5) * 1.5,
               life: 1,
             })
@@ -154,7 +160,7 @@ export default function CursorPet() {
       g.lineWidth = 2
       g.lineCap = 'round'
 
-      const fy = floor() - jy
+      const fy = y - jy
       const squash = jy > 0 ? 1 + Math.min(0.18, Math.abs(vy) * 0.02) : 1
 
       g.save()
