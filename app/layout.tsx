@@ -1,30 +1,18 @@
 import type { Metadata } from 'next'
-import { Inter, Space_Mono } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import './globals.css'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 
-// Inter - Clean modern sans-serif for space theme
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
   display: 'swap',
-  weight: ['300', '400', '500', '600', '700'],
-})
-
-// Space Mono for technical elements
-const spaceMono = Space_Mono({
-  subsets: ['latin'],
-  variable: '--font-space-mono',
-  weight: ['400', '700'],
-  display: 'swap',
 })
 
 export const metadata: Metadata = {
-  title: 'Sachiv C — AI Engineer | Interactive Space Journey',
-  description: 'AI Engineer & Creative Technologist specializing in intelligent systems and human-centered design. Embark on an immersive space-themed portfolio experience.',
-  openGraph: {
-    title: 'Sachiv C — AI Engineer',
-    description: 'AI Engineer & Creative Technologist specializing in intelligent systems',
-  },
+  title: 'Your Name — Engineer',
+  description: 'Minimal portfolio. Summary, work, projects, and writing.',
 }
 
 export default function RootLayout({
@@ -33,9 +21,13 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className="scroll-smooth">
-      <body className={`${inter.variable} ${spaceMono.variable} font-inter antialiased`}>
-        {children}
+    <html lang="en">
+      <body className={`${inter.variable} font-sans bg-white text-neutral-900 antialiased`}>
+        <div className="mx-auto max-w-2xl px-6">
+          <Navbar />
+          <main className="pb-24">{children}</main>
+          <Footer />
+        </div>
       </body>
     </html>
   )
