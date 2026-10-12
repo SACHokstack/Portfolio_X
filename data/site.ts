@@ -150,12 +150,4 @@ export const achievements: string[] = [
   'Oracle Cloud Certified Architect',
 ]
 
-export const posts: Post[] = [
-  {
-    slug: 'hello-world',
-    title: 'Hello world',
-    date: '2026-01-01',
-    excerpt:
-      'Placeholder — replace with your first note. The resume is now the source of truth for the rest of the site.',
-  },
-]
+export const posts: Post[] = []

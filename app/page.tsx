@@ -88,24 +88,26 @@ export default function Home() {
       </section>
 
       {/* Writing preview */}
-      <section>
-        <SectionHeader title="Writing" href="/blog" />
-        <ul className="space-y-3">
-          {posts.slice(0, 5).map((post) => (
-            <li key={post.slug}>
-              <Link
-                href="/blog"
-                className="group flex items-baseline justify-between gap-4"
-              >
-                <span className="group-hover:underline">{post.title}</span>
-                <span className="shrink-0 text-sm text-neutral-400 dark:text-neutral-500">
-                  {post.date}
-                </span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
+      {posts.length > 0 && (
+        <section>
+          <SectionHeader title="Writing" href="/blog" />
+          <ul className="space-y-3">
+            {posts.slice(0, 5).map((post) => (
+              <li key={post.slug}>
+                <Link
+                  href="/blog"
+                  className="group flex items-baseline justify-between gap-4"
+                >
+                  <span className="group-hover:underline">{post.title}</span>
+                  <span className="shrink-0 text-sm text-neutral-400 dark:text-neutral-500">
+                    {post.date}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <section className="text-[15px] text-neutral-500 dark:text-neutral-400">
         <p>
