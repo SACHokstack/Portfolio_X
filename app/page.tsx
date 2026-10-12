@@ -30,7 +30,7 @@ export default function Home() {
           {site.bio}
         </p>
         <p className="mt-4 leading-7 text-neutral-500 dark:text-neutral-400">
-          {site.tagline}
+          {site.tagline} <span className="animate-pulse text-black dark:text-white">▊</span>
         </p>
         <div className="mt-4 flex gap-4 text-sm">
           {site.socials.map((s) => (

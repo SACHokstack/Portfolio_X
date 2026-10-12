@@ -1,15 +1,16 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Providers from '@/components/Providers'
 import CursorPet from '@/components/CursorPet'
 
-const inter = Inter({
+const jb = JetBrains_Mono({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-jb',
   display: 'swap',
+  weight: ['400', '500', '600', '700'],
 })
 
 export const metadata: Metadata = {
@@ -26,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} font-sans bg-white text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-100`}
+        className={`${jb.variable} font-sans bg-white text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-100`}
       >
         <Providers>
           <div className="mx-auto max-w-2xl px-6">
