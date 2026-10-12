@@ -4,6 +4,7 @@ import './globals.css'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Providers from '@/components/Providers'
+import CursorPet from '@/components/CursorPet'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -33,6 +34,7 @@ export default function RootLayout({
             <main className="pb-24">{children}</main>
             <Footer />
           </div>
+          <CursorPet />
         </Providers>
       </body>
     </html>
