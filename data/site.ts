@@ -90,7 +90,7 @@ export const jobs: Job[] = [
     company: 'ISSG & SpineDAO',
     role: 'AI Engineer (Freelance)',
     period: 'Sep 2025 — Dec 2025',
-    location: 'Remote',
+    location: 'France · Remote',
     summary:
       'Built production AI systems combining retrieval + generation over 1,400+ biomedical manuscripts, and automated research bots with Gemini File Search and the ElizaOS agent framework.',
     kind: 'freelance',
