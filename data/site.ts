@@ -68,6 +68,15 @@ export const jobs: Job[] = [
     kind: 'freelance',
   },
   {
+    company: 'Mednoia',
+    role: 'Founding Engineer',
+    period: 'Jun 2026 — Sep 2026',
+    location: 'Seattle, WA',
+    summary:
+      'Owned the full experimentation pipeline for acoustic screening on Google HeAR embeddings + PyTorch classifier: 0.8245 AUC (78.7% sensitivity, 71.3% specificity). Built a robustness pipeline (event isolation, codec/noise/gain augmentation) lifting AUC 0.782 → 0.8245, and shipped inference via a Flask API.',
+    kind: 'fulltime',
+  },
+  {
     company: 'Timmins Consulting',
     role: 'AI Engineer (Freelance)',
     period: 'May 2026 — Jun 2026',
@@ -76,15 +85,6 @@ export const jobs: Job[] = [
       'Built a WhatsApp lead automation and conversational AI system for a Malaysian training company: hybrid RAG (semantic + BM25) over course content with grounded, source-cited answers; FastAPI webhook ingestion with conversation-state tracking and rule-based intent routing; safety filtering blocking unsupported claims and invalid pricing. Automated lead import from Meta Ads/Sheets and status-based outreach with send-window and retry controls.',
     kind: 'freelance',
     link: 'https://timmins-consulting.com/',
-  },
-  {
-    company: 'Mednoia',
-    role: 'Founding Engineer',
-    period: 'Jun 2026 — Sep 2026',
-    location: 'Seattle, WA',
-    summary:
-      'Owned the full experimentation pipeline for acoustic screening on Google HeAR embeddings + PyTorch classifier: 0.8245 AUC (78.7% sensitivity, 71.3% specificity). Built a robustness pipeline (event isolation, codec/noise/gain augmentation) lifting AUC 0.782 → 0.8245, and shipped inference via a Flask API.',
-    kind: 'fulltime',
   },
   {
     company: 'ISSG & SpineDAO',
