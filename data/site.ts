@@ -59,6 +59,25 @@ export const jobGroups: { kind: JobKind; label: string }[] = [
 // Source of truth: resume (Oct 2026).
 export const jobs: Job[] = [
   {
+    company: 'Zentinel',
+    role: 'AI Engineer (Freelance)',
+    period: 'Oct 2026 — Present',
+    location: 'Remote',
+    summary:
+      'Shipping camera-based vitals for a patient app: a 30-second face scan processed with rPPG signal analysis extracts heart rate, HRV, and breathing rate — no band, no clip, just the phone. Built wellness score and stress-level indicators from the measured readings, and shipped blood pressure and oxygen saturation as honestly-labeled directional trends rather than clinical readings.',
+    kind: 'freelance',
+  },
+  {
+    company: 'Timmins Consulting',
+    role: 'AI Engineer (Freelance)',
+    period: 'May 2026 — Jun 2026',
+    location: 'Malaysia · Remote',
+    summary:
+      'Built a WhatsApp lead automation and conversational AI system for a Malaysian training company: hybrid RAG (semantic + BM25) over course content with grounded, source-cited answers; FastAPI webhook ingestion with conversation-state tracking and rule-based intent routing; safety filtering blocking unsupported claims and invalid pricing. Automated lead import from Meta Ads/Sheets and status-based outreach with send-window and retry controls.',
+    kind: 'freelance',
+    link: 'https://timmins-consulting.com/',
+  },
+  {
     company: 'Mednoia',
     role: 'Founding Engineer',
     period: 'Jun 2026 — Sep 2026',
@@ -97,6 +116,16 @@ export const projects: Project[] = [
     year: '2026',
     tech: ['HeAR', 'MedGemma', 'MedSigLIP', 'PyTorch'],
     link: 'https://bigtb6.vercel.app',
+    extraLinks: [
+      {
+        label: 'writeup',
+        href: 'https://www.kaggle.com/competitions/med-gemma-impact-challenge/writeups/bigtb6#3413515',
+      },
+      {
+        label: 'model',
+        href: 'https://huggingface.co/sach3v/Domain_aware_dual_head_HEar',
+      },
+    ],
   },
   {
     slug: 'orca-g4',
@@ -104,12 +133,16 @@ export const projects: Project[] = [
     category: 'Medical Vision AI',
     description:
       'YOLO11 lesion-detection pipeline (273 images → 362 crops, up to 0.553 mAP@50), then Gemma fine-tuned with LoRA + 4-bit quantization on a single RTX 3090 for offline vision-language classification with JAX-exported on-device deployment.',
-    year: '2025',
+    year: '2026',
     tech: ['YOLO11', 'Gemma', 'LoRA', 'JAX', '4-bit'],
     extraLinks: [
       {
         label: 'model',
         href: 'https://huggingface.co/sach3v/Gemma-4-e2b-custom-oral_cancer/tree/main',
+      },
+      {
+        label: 'writeup',
+        href: 'https://www.kaggle.com/competitions/gemma-4-good-hackathon/writeups/orca-g4#3458580',
       },
     ],
   },
@@ -119,8 +152,15 @@ export const projects: Project[] = [
     category: 'Evaluation',
     description:
       'Reproducible evaluation framework spanning 23 Indian languages and 13 scripts; fine-tuned a 237M-parameter MuRIL encoder for 50 entity types to study multilingual transfer and character-level leakage.',
-    year: '2025',
+    year: '2026',
     tech: ['MuRIL', 'Multilingual NER', 'Eval Harness'],
+    github: 'https://github.com/SACHokstack/IndicPHI-Bench',
+    extraLinks: [
+      {
+        label: 'model',
+        href: 'https://huggingface.co/sach3v/indicphi-muril-pii',
+      },
+    ],
   },
   {
     slug: 'gpu-kernels',
@@ -128,7 +168,7 @@ export const projects: Project[] = [
     category: 'Systems',
     description:
       'Progressively-tiled CUDA GEMM kernels (memory hierarchy, register tiling, occupancy); extending to attention and inference optimization with a focus on CUDA and FlashAttention.',
-    year: '2025',
+    year: '2026',
     tech: ['CUDA', 'GEMM', 'FlashAttention'],
   },
 ]
