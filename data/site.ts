@@ -187,6 +187,8 @@ export const achievements: string[] = [
   'Midpoint & Small Prize — BIOxAI Hackathon, BioProtocol ($15,000, 5,000+ teams)',
   'Top 14 / 2,293 — NVIDIA-hosted hackathon · 3× national hackathon finalist',
   'OpenMed PR #725 — leakage heatmap by label × language for multilingual eval',
+  'Merged open-source PR #6563 — LMCache/LMCache (github.com/LMCache/LMCache/pull/6563)',
+  'Merged open-source PR #6349 — LMCache/LMCache (github.com/LMCache/LMCache/pull/6349)',
   'Oracle Cloud Certified Architect',
 ]
 
